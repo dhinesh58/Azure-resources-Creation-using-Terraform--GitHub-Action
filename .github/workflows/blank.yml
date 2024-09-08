@@ -1,34 +1,29 @@
-# This is a basic workflow to help you get started with Actions
+name: Azure Infra Deployment 
 
-name: Azure Infra Deployment
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+ push:
+   branches:
+     - main
 jobs:
   terraform:
-    name: 'Terraform'
+    name: "terraform"
     runs-on: ubuntu-latest
-env:
- ARM_CLIENT_ID: ${{secrets.TERRAFORM_CLIENT_ID}}
- ARM_CLIENT_SECRET: ${{secrets.TERRAFORM_CLIENT_SECRET}}
- ARM_TENANT_ID: ${{secrets.TERRAFORM_TENANT_ID}}
- ARM_SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID}}
- TF_VERSION: 1.9.5
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TERRAFORM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TERRAFORM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TERRAFORM_TENANT_ID }}
+      TF_VERSION: 1.3.6
 
-defaults:
+    defaults:
       run:
         shell: bash
-        working-directory: ./terraform
-    steps: 
-      - name: checkout
-        uses: actions/checkout@v2
+        working-directory: ./terraform  
 
-      - name: Setup Terraform
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: setup Terraform 
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
@@ -38,4 +33,12 @@ defaults:
 
       - name: Terraform init
         id: init
-        run: terraform init 
+        run: terraform init
+
+      - name: Terraform plan
+        id: plan
+        run: terraform plan
+
+      - name: Terraform apply
+        id: apply
+        run: terraform apply -auto-approve
