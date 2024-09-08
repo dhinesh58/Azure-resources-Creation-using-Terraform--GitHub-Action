@@ -24,8 +24,7 @@ jobs:
       - name: setup Terraform 
         uses: hashicorp/terraform-github-actions@master
         with:
-<<<<<<< HEAD
-          terraform_version: 0.14.8
+          tf_actions_version: 0.14.8
           tf_actions_subcommand: 'fmt'
           tf_actions_working_dir: "./terraform"
 
