@@ -13,6 +13,8 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.ACTIONS_CLIENT_SECRET_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ACTIONS_TENANT_ID }}
+      ROOT_PATH: '../../src'
+
 # Use the bash shell 
     defaults:
       run:
@@ -21,32 +23,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: setup Terraform 
-        uses: hashicorp/terraform-github-actions@master
+        uses: hashicorp/setup-terraform@v1
         with:
-          tf_actions_version: 0.14.8
-          tf_actions_subcommand: 'fmt'
-          tf_actions_working_dir: "./terraform"
+          terraform_version: 1.9.5
 
       - name: Terraform init
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.14.8
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: "./terraform"
+        run: terraform init
+        working-directory: ${{env.ROOT_PATH}}
+        
 
       - name: Terraform plan
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.14.8
-          tf_actions_subcommand: 'plan'
-          tf_actions_working_dir: "./terraform"
+        run:  terraform plan
+        working-directory: ${{env.ROOT_PATH}}
 
       - name: Terraform apply
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.14.8
-          tf_actions_subcommand: 'apply'
-          tf_actions_working_dir: "./terraform"
+        run: terraform apply -auto-approve
+        working-directory: ${{env.ROOT_PATH}}
 
 
