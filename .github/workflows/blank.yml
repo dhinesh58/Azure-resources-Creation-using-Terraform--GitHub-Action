@@ -8,12 +8,13 @@ jobs:
   terraform:
     name: "terraform"
     runs-on: ubuntu-latest
+    environment: production
     env:
       ARM_CLIENT_ID: ${{ secrets.ACTIONS_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ACTIONS_CLIENT_SECRET_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ACTIONS_TENANT_ID }}
-      ROOT_PATH: '../../src'
+      ROOT_PATH: '${{github.workspace}}/src'
 
 # Use the bash shell 
     defaults:
